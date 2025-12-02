@@ -17,9 +17,7 @@ export async function fetchAccountTransactions(
   if (!address) return [];
 
   if (!HELIUS_API_KEY) {
-    console.warn(
-      "❗ Helius API Key가 없습니다. .env에 VITE_HELIUS_API_KEY를 설정하세요."
-    );
+    console.warn("Helius API Key가 없습니다. .env에 VITE_HELIUS_API_KEY 확인.");
     return [];
   }
 

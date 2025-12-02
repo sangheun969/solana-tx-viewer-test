@@ -63,17 +63,14 @@ const AddressSearchPage: React.FC = () => {
         {isLoading && (
           <div className="text-center text-slate-400">불러오는 중...</div>
         )}
-
         {isError && (
           <div className="text-center text-red-400">
             에러 발생: {error?.message}
           </div>
         )}
-
         {transactions && transactions.length === 0 && !isLoading && (
           <div className="text-center text-slate-400">트랜잭션이 없습니다.</div>
         )}
-
         {transactions && transactions.length > 0 && (
           <div className="border border-slate-800 rounded-lg overflow-hidden bg-slate-900">
             <table className="w-full text-sm">
