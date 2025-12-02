@@ -17,6 +17,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VITE_HELIUS_API_KEY: ${{ secrets.VITE_HELIUS_API_KEY }}
 
     steps:
       - name: Checkout repository

@@ -3,6 +3,9 @@ import axios from "axios";
 const HELIUS_BASE_URL = "https://api-mainnet.helius-rpc.com";
 const HELIUS_API_KEY = import.meta.env.VITE_HELIUS_API_KEY;
 
+if (!HELIUS_API_KEY) {
+  console.error("VITE_HELIUS_API_KEY is missing");
+}
 export interface TxSummary {
   txHash: string;
   blockTime?: number | null;
