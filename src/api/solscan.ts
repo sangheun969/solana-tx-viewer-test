@@ -37,8 +37,8 @@ export async function fetchAccountTransactions(
     }
     return data.map((tx: any) => ({
       txHash: tx.signature, // 트랜잭션 서명
-      blockTime: tx.timestamp ?? null, // 유닉스 타임스탬프(초 단위)
-      fee: tx.fee, // lamports
+      blockTime: tx.timestamp ?? null,
+      fee: tx.fee,
       status: tx.transactionError ? "Failed" : "Success",
     }));
   } catch (err: any) {
