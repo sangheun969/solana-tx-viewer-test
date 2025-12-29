@@ -12,7 +12,7 @@ const AddressSearchPage: React.FC = () => {
   const [upbitProfit, setUpbitProfit] = useState<number>(0);
 
   const onchainProfit = useMemo(() => {
-    return queryAddress ? 12_340_000 : 0;
+    return queryAddress ? 1_234_000 : 0;
   }, [queryAddress]);
 
   const totalProfit = onchainProfit + upbitProfit;
@@ -40,7 +40,7 @@ const AddressSearchPage: React.FC = () => {
 
     setTimeout(() => {
       setUpbitConnected(true);
-      setUpbitProfit(25_000_000);
+      setUpbitProfit(2_500_000);
       setConnecting(false);
     }, 900);
   };
@@ -64,6 +64,22 @@ const AddressSearchPage: React.FC = () => {
       <h1 className="text-2xl md:text-3xl font-semibold">
         Solana 지갑 트랜잭션 조회
       </h1>
+
+      <div className="flex gap-2 mt-4">
+        <input
+          className="border border-slate-700 bg-slate-900 text-slate-50 p-2 rounded w-58 md:w-96 outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Solana 지갑 주소 입력"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+          disabled={!address.trim()}
+        >
+          조회
+        </button>
+      </div>
 
       <div className="w-full max-w-4xl px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -121,7 +137,7 @@ const AddressSearchPage: React.FC = () => {
           </div>
         </div>
       </div>
-
+      {/* 
       <div className="flex gap-2 mt-2">
         <input
           className="border border-slate-700 bg-slate-900 text-slate-50 p-2 rounded w-58 md:w-96 outline-none focus:ring-2 focus:ring-blue-500"
@@ -136,7 +152,7 @@ const AddressSearchPage: React.FC = () => {
         >
           조회
         </button>
-      </div>
+      </div> */}
 
       {queryAddress && (
         <div className="text-sm text-slate-300 ">

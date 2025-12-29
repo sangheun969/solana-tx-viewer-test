@@ -36,7 +36,7 @@ export async function fetchAccountTransactions(
       return [];
     }
     return data.map((tx: any) => ({
-      txHash: tx.signature, // 트랜잭션 서명
+      txHash: tx.signature,
       blockTime: tx.timestamp ?? null,
       fee: tx.fee,
       status: tx.transactionError ? "Failed" : "Success",
