@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/solana-tx-viewer-test">
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>

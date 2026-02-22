@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import LoginModal from "../organisms/LoginModal";
-import type React from "react";
 
 const Header = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
