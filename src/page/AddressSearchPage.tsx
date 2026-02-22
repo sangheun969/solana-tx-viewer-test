@@ -130,8 +130,8 @@ const AddressSearchPage: React.FC = () => {
                 {upbitConnected
                   ? "업비트 연동됨 ✔"
                   : connecting
-                  ? "연동 중..."
-                  : "업비트 연동"}
+                    ? "연동 중..."
+                    : "업비트 연동"}
               </button>
             </div>
           </div>
@@ -227,8 +227,6 @@ const AddressSearchPage: React.FC = () => {
             </table>
           </div>
         )}
-
-        {/* ✅ 시연용 한 줄 (원하면 제거 가능) */}
         <div className="mt-4 text-center text-xs text-slate-500">
           * “업비트 연동”은 현재 데모 연출이며, 실제 API 연동은 추후 단계에서
           적용됩니다.
