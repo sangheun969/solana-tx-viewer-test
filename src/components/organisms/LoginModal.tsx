@@ -1,28 +1,50 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { loginDummy } from "../../utils/auth";
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onLoginSuccess?: () => void;
 }
 
-const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
+const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps) => {
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
+      if (e.key === "Escape") onClose();
     };
 
-    if (isOpen) {
-      window.addEventListener("keydown", handleEsc);
-    }
+    if (isOpen) window.addEventListener("keydown", handleEsc);
 
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
 
+  useEffect(() => {
+    if (isOpen) {
+      setId("");
+      setPw("");
+      setError(null);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const ok = loginDummy(id.trim(), pw);
+    if (!ok) {
+      setError("아이디 또는 비밀번호가 올바르지 않습니다. (user1 / 1234)");
+      return;
+    }
+
+    onClose();
+    onLoginSuccess?.();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -41,20 +63,26 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
           ✕
         </button>
 
-        <h2 className="text-xl font-semibold mb-6">로그인</h2>
+        <h2 className="text-xl font-semibold mb-2">로그인</h2>
+        <p className="text-sm text-gray-500 mb-6">테스트 계정: user1 / 1234</p>
 
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={onSubmit}>
           <input
-            type="email"
-            placeholder="이메일"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            placeholder="아이디"
             className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
           />
 
           <input
             type="password"
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
             placeholder="비밀번호"
             className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
           />
+
+          {error && <div className="text-sm text-red-600 -mt-1">{error}</div>}
 
           <button
             type="submit"
