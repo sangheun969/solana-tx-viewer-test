@@ -1,20 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import LoginModal from "../organisms/LoginModal";
-import { isLoggedIn, logout } from "../../utils/auth";
+import UserMenu from "../organisms/UserMenu";
 
-const Header = () => {
+type HeaderProps = {
+  authed: boolean;
+  onAuthChange: () => void;
+};
+
+const Header = ({ authed, onAuthChange }: HeaderProps) => {
   const [open, setOpen] = useState(false);
-  const [authed, setAuthed] = useState(false);
-
-  const syncAuth = () => setAuthed(isLoggedIn());
-
-  useEffect(() => {
-    syncAuth();
-    const onStorage = () => syncAuth();
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
 
   return (
     <header className="w-full flex items-center justify-between px-6 py-4 border-b">
@@ -24,18 +19,7 @@ const Header = () => {
 
       <div className="flex items-center gap-3">
         {authed ? (
-          <>
-            <span className="text-sm text-gray-600">user1</span>
-            <button
-              className="px-3 py-1.5 rounded-md border hover:bg-gray-50"
-              onClick={() => {
-                logout();
-                syncAuth();
-              }}
-            >
-              로그아웃
-            </button>
-          </>
+          <UserMenu onLogout={onAuthChange} />
         ) : (
           <>
             <button
@@ -58,7 +42,7 @@ const Header = () => {
       <LoginModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onLoginSuccess={syncAuth}
+        onLoginSuccess={onAuthChange}
       />
     </header>
   );
