@@ -5,7 +5,9 @@ import { calculateWalletValue } from "../api/walletValue";
 
 const UserDashboardPage = () => {
   const [wallets, setWallets] = useState<SavedWallet[]>([]);
-  const [totalAssetKrw, setTotalAssetKrw] = useState(0);
+  const [solBalance, setSolBalance] = useState(0);
+  const [solPriceUsd, setSolPriceUsd] = useState(0);
+  const [totalUsd, setTotalUsd] = useState(0);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -14,24 +16,28 @@ const UserDashboardPage = () => {
 
     const loadWalletValues = async () => {
       if (savedWallets.length === 0) {
-        setTotalAssetKrw(0);
+        setSolBalance(0);
+        setSolPriceUsd(0);
+        setTotalUsd(0);
         return;
       }
 
       try {
         setLoading(true);
+        const firstWallet = savedWallets[0];
+        const result = await calculateWalletValue(firstWallet.address);
 
-        let totalKrw = 0;
+        setSolBalance(result.solBalance);
+        setSolPriceUsd(result.solPriceUsd);
+        setTotalUsd(result.totalUsd);
 
-        for (const wallet of savedWallets) {
-          const result = await calculateWalletValue(wallet.address);
-          totalKrw += result.totalKrw;
-        }
-
-        setTotalAssetKrw(totalKrw);
+        console.log("wallet address:", firstWallet.address);
+        console.log("wallet result:", result);
       } catch (error) {
-        console.error("지갑 총 자산 계산 오류:", error);
-        setTotalAssetKrw(0);
+        console.error("지갑 자산 계산 오류:", error);
+        setSolBalance(0);
+        setSolPriceUsd(0);
+        setTotalUsd(0);
       } finally {
         setLoading(false);
       }
@@ -49,22 +55,25 @@ const UserDashboardPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="border rounded-xl p-5 bg-white shadow-sm">
-          <p className="text-sm text-gray-500 mb-2">총 보유 자산</p>
+          <p className="text-sm text-gray-500 mb-2">총 SOL 자산 (USD)</p>
           <p className="text-2xl font-bold">
-            {loading
-              ? "계산 중..."
-              : `₩${Math.round(totalAssetKrw).toLocaleString()}`}
+            {loading ? "계산 중..." : `$${totalUsd.toFixed(4)}`}
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            {solBalance.toFixed(6)} SOL × ${solPriceUsd.toFixed(2)}
           </p>
         </div>
 
         <div className="border rounded-xl p-5 bg-white shadow-sm">
           <p className="text-sm text-gray-500 mb-2">판매 수익</p>
-          <p className="text-2xl font-bold">₩0</p>
+          <p className="text-2xl font-bold">$0</p>
+          <p className="text-xs text-gray-500 mt-2">추후 구현 예정</p>
         </div>
 
         <div className="border rounded-xl p-5 bg-white shadow-sm">
           <p className="text-sm text-gray-500 mb-2">거래 확인</p>
           <p className="text-2xl font-bold">0건</p>
+          <p className="text-xs text-gray-500 mt-2">추후 구현 예정</p>
         </div>
       </div>
 
