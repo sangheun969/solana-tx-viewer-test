@@ -4,6 +4,8 @@ import type { SavedWallet } from "../types/wallet";
 import { calculateWalletValue } from "../api/walletValue";
 import IconBtnDown from "../assets/icons/icon_btn_down.png";
 import IconBtnUp from "../assets/icons/icon_btn_up.png";
+import TaxAdvisorBanner from "../components/templates/TaxAdvisorBanner";
+import TaxActionButtons from "../components/templates/TaxActionButtons";
 
 type WalletValueMap = Record<
   string,
@@ -11,6 +13,8 @@ type WalletValueMap = Record<
     solBalance: number;
     solPriceUsd: number;
     totalUsd: number;
+    realizedPnl: number;
+    txCount: number;
   }
 >;
 
@@ -18,6 +22,11 @@ const getAmountColorClass = (amount: number) => {
   if (amount > 0) return "text-green-500";
   if (amount < 0) return "text-red-500";
   return "text-black";
+};
+
+const formatUsd = (amount: number) => {
+  const sign = amount > 0 ? "+" : "";
+  return `${sign}$${amount.toFixed(2)}`;
 };
 
 const UserDashboardPage = () => {
@@ -50,6 +59,12 @@ const UserDashboardPage = () => {
                   solBalance: result.solBalance ?? 0,
                   solPriceUsd: result.solPriceUsd ?? 0,
                   totalUsd: result.totalUsd ?? 0,
+
+                  // 추후 실현 손익 계산 API 연결 예정
+                  realizedPnl: 0,
+
+                  // 추후 거래 내역 조회 API 연결 예정
+                  txCount: 0,
                 },
               };
             } catch (error) {
@@ -61,6 +76,8 @@ const UserDashboardPage = () => {
                   solBalance: 0,
                   solPriceUsd: 0,
                   totalUsd: 0,
+                  realizedPnl: 0,
+                  txCount: 0,
                 },
               };
             }
@@ -103,6 +120,20 @@ const UserDashboardPage = () => {
     );
   }, [walletValues]);
 
+  const totalRealizedPnl = useMemo(() => {
+    return Object.values(walletValues).reduce(
+      (sum, wallet) => sum + wallet.realizedPnl,
+      0,
+    );
+  }, [walletValues]);
+
+  const totalTxCount = useMemo(() => {
+    return Object.values(walletValues).reduce(
+      (sum, wallet) => sum + wallet.txCount,
+      0,
+    );
+  }, [walletValues]);
+
   const visibleWallets = showAllWallets ? wallets : wallets.slice(0, 3);
   const hasMoreThanThree = wallets.length > 3;
 
@@ -110,7 +141,7 @@ const UserDashboardPage = () => {
     <div className="max-w-6xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-2">내 대시보드</h1>
       <p className="text-gray-600 mb-8">
-        등록한 지갑들의 수익 요약과 거래 현황을 확인할 수 있습니다.
+        등록한 지갑들의 자산 요약과 거래 현황을 확인할 수 있습니다.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -125,52 +156,31 @@ const UserDashboardPage = () => {
         </div>
 
         <div className="rounded-xl p-5 bg-white shadow-sm">
-          <p className="text-sm font-bold mb-2">판매 수익</p>
-          <p className="text-2xl font-bold text-black">$0</p>
-          <p className="text-xs text-gray-500 mt-2">추후 구현 예정</p>
+          <p className="text-sm font-bold mb-2">실현 손익</p>
+          <p
+            className={`text-2xl font-bold ${getAmountColorClass(
+              totalRealizedPnl,
+            )}`}
+          >
+            {loading ? "계산 중..." : formatUsd(totalRealizedPnl)}
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            현재는 0으로 표시되며 추후 거래 분석 기능으로 연결됩니다.
+          </p>
         </div>
 
         <div className="rounded-xl p-5 bg-white shadow-sm">
           <p className="text-sm font-bold mb-2">거래 확인</p>
-          <p className="text-2xl font-bold text-black">0건</p>
-          <p className="text-xs text-gray-500 mt-2">추후 구현 예정</p>
+          <p className="text-2xl font-bold text-black">
+            {loading ? "계산 중..." : `${totalTxCount}건`}
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            현재는 0건으로 표시되며 추후 거래 내역 기능으로 연결됩니다.
+          </p>
         </div>
       </div>
-
-      <div className="rounded-2xl p-6 mb-8 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-100 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <p className="text-lg font-bold text-gray-900">
-              복잡한 DEX 거래, 세무사와 바로 연결하세요
-            </p>
-            <p className="text-sm text-gray-600 mt-2 leading-6">
-              스왑, 브릿지, 스테이킹처럼 정리가 어려운 거래도 코인 세무 경험이
-              있는 세무사와 상담할 수 있습니다.
-            </p>
-            <div className="flex flex-wrap gap-2 mt-3">
-              <span className="text-xs px-3 py-1 rounded-full bg-white border text-gray-600">
-                DEX 거래 검토
-              </span>
-              <span className="text-xs px-3 py-1 rounded-full bg-white border text-gray-600">
-                세금 신고 준비
-              </span>
-              <span className="text-xs px-3 py-1 rounded-full bg-white border text-gray-600">
-                지갑별 리포트 기반 상담
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2">
-            <button className="px-4 py-2 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition">
-              세무사 연결하기
-            </button>
-            <button className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition">
-              자세히 보기
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <TaxAdvisorBanner />
+      <TaxActionButtons />
       <div className="border rounded-xl p-6 bg-white shadow-sm">
         <h2 className="text-lg font-semibold mb-4">등록된 지갑 주소</h2>
 
@@ -182,6 +192,7 @@ const UserDashboardPage = () => {
               {visibleWallets.map((wallet) => {
                 const walletValue = walletValues[wallet.id];
                 const walletTotalUsd = walletValue?.totalUsd ?? 0;
+                const walletRealizedPnl = walletValue?.realizedPnl ?? 0;
 
                 return (
                   <div
@@ -191,6 +202,7 @@ const UserDashboardPage = () => {
                     <div className="min-w-0">
                       <div className="flex items-center gap-3 flex-wrap">
                         <p className="font-medium">{wallet.name}</p>
+
                         <span
                           className={`text-xl font-semibold ${getAmountColorClass(
                             walletTotalUsd,
@@ -200,10 +212,26 @@ const UserDashboardPage = () => {
                             ? "계산 중..."
                             : `$${walletTotalUsd.toFixed(2)}`}
                         </span>
+
+                        <span className="text-gray-300">/</span>
+
+                        <span
+                          className={`text-lg font-semibold ${getAmountColorClass(
+                            walletRealizedPnl,
+                          )}`}
+                        >
+                          {loading && !walletValue
+                            ? "..."
+                            : formatUsd(walletRealizedPnl)}
+                        </span>
                       </div>
 
                       <p className="text-sm text-gray-600 break-all mt-1">
                         {wallet.address}
+                      </p>
+
+                      <p className="text-xs text-gray-400 mt-2">
+                        총 자산 / 실현 손익
                       </p>
                     </div>
 
