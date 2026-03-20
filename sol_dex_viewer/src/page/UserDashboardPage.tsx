@@ -200,7 +200,7 @@ const UserDashboardPage = () => {
         realizedProfitKrw={totalRealizedPnl * usdKrwRate}
       />
       <div className="border rounded-xl p-6 bg-white shadow-sm">
-        <h2 className="text-lg font-semibold mb-4">등록된 지갑 주소</h2>
+        <h2 className="text-lg font-semibold mb-4">등록된 지갑 주소.</h2>
 
         {wallets.length === 0 ? (
           <p className="text-gray-500">등록된 지갑이 없습니다.</p>
