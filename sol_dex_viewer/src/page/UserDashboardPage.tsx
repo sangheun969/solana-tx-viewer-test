@@ -156,7 +156,7 @@ const UserDashboardPage = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="rounded-xl p-5 bg-white shadow-sm">
-          <p className="text-sm font-bold mb-2">총 SOL 자산 (USD)</p>
+          <p className="text-sm font-bold mb-2">총 SOL 자산 </p>
           <p className={`text-2xl font-bold ${getAmountColorClass(totalUsd)}`}>
             {loading ? "계산 중..." : formatKrw(totalUsd * usdKrwRate)}
           </p>

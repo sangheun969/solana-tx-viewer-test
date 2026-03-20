@@ -62,7 +62,7 @@ const AddressSearchPage: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-12 gap-6 bg-slate-950 text-slate-50">
       <h1 className="text-2xl md:text-3xl font-semibold">
-        Solana 지갑 트랜잭션 조회
+        Solana 트랜잭션 조회
       </h1>
 
       <div className="flex gap-2 mt-4">

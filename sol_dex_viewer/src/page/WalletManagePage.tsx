@@ -68,7 +68,7 @@ const WalletManagePage = () => {
 
       setName("");
       setAddress("");
-      setSuccessMessage("지갑이 등록되었습니다.");
+      setSuccessMessage("지갑이 등록되었습니다");
     } catch (err) {
       console.error("지갑 등록 오류:", err);
       setError("지갑 등록 중 오류가 발생했습니다.");
