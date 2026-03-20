@@ -10,7 +10,7 @@ type SolPriceCache = {
 
 let solPriceCache: SolPriceCache | null = null;
 
-const SOL_PRICE_TTL_MS = 15 * 1000;
+const SOL_PRICE_TTL_MS = 60 * 1000;
 const COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price";
 
 router.get("/sol", async (_req, res) => {

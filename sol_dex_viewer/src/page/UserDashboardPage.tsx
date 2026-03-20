@@ -149,10 +149,10 @@ const UserDashboardPage = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
-      <h1 className="text-2xl font-bold mb-2">내 대시보드</h1>
+      {/* <h1 className="text-2xl font-bold mb-2">내 대시보드</h1>
       <p className="text-gray-600 mb-8">
         등록한 지갑들의 자산 요약과 거래 현황을 확인할 수 있습니다.
-      </p>
+      </p> */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="rounded-xl p-5 bg-white shadow-sm">
