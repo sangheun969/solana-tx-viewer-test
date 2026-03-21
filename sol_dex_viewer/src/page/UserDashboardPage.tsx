@@ -9,6 +9,7 @@ import TaxActionButtons from "../components/templates/TaxActionButtons";
 import { fetchUsdKrwRate } from "../api/exchangeRate";
 import EstimatedTaxModal from "../components/templates/EstimatedTaxModal";
 import { fetchSolPriceUsd } from "../api/price";
+import TaxAdvisorPromo from "../components/templates/TaxAdvisorPromo";
 
 type WalletValueMap = Record<
   string,
@@ -184,9 +185,12 @@ const UserDashboardPage = () => {
         </div>
       </div>
       <TaxAdvisorBanner />
-      <TaxActionButtons
-        onOpenEstimatedTax={() => setIsEstimatedTaxModalOpen(true)}
-      />
+      <TaxAdvisorPromo />
+      <div className="mt-8">
+        <TaxActionButtons
+          onOpenEstimatedTax={() => setIsEstimatedTaxModalOpen(true)}
+        />
+      </div>
       <EstimatedTaxModal
         open={isEstimatedTaxModalOpen}
         onClose={() => setIsEstimatedTaxModalOpen(false)}
