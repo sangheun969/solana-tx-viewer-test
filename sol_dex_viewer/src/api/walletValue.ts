@@ -1,5 +1,4 @@
 import { fetchSolBalance } from "./solscan";
-import { fetchSolPriceUsd } from "./price";
 
 export interface WalletValueResult {
   solBalance: number;
@@ -9,7 +8,7 @@ export interface WalletValueResult {
 
 export async function calculateWalletValue(
   address: string,
-  solPriceUsd?: number,
+  solPriceUsd: number,
 ): Promise<WalletValueResult> {
   if (!address) {
     return {
@@ -21,14 +20,11 @@ export async function calculateWalletValue(
 
   try {
     const solBalance = await fetchSolBalance(address);
-
-    const price = solPriceUsd ?? (await fetchSolPriceUsd());
-
-    const totalUsd = solBalance * price;
+    const totalUsd = solBalance * solPriceUsd;
 
     return {
       solBalance,
-      solPriceUsd: price,
+      solPriceUsd,
       totalUsd,
     };
   } catch (error) {
@@ -36,7 +32,7 @@ export async function calculateWalletValue(
 
     return {
       solBalance: 0,
-      solPriceUsd: solPriceUsd ?? 0,
+      solPriceUsd,
       totalUsd: 0,
     };
   }

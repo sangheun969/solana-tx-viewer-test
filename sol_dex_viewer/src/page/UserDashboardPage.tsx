@@ -116,13 +116,6 @@ const UserDashboardPage = () => {
     );
   }, [walletValues]);
 
-  // const solPriceUsd = useMemo(() => {
-  //   const firstValue = Object.values(walletValues).find(
-  //     (wallet) => wallet.solPriceUsd > 0,
-  //   );
-  //   return firstValue?.solPriceUsd ?? 0;
-  // }, [walletValues]);
-
   const totalUsd = useMemo(() => {
     return Object.values(walletValues).reduce(
       (sum, wallet) => sum + wallet.totalUsd,
