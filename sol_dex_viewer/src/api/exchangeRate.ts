@@ -1,32 +1,36 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import axios from "axios";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+
+const FALLBACK_USD_KRW_RATE = 1506;
 
 type ExchangeRateResponse = {
-  success?: boolean;
-  rate?: number;
-  rates?: {
-    KRW?: number;
-  };
+  success: boolean;
+  rate: number;
   message?: string;
 };
 
-export const fetchUsdKrwRate = async (): Promise<number> => {
-  const url = API_BASE_URL
-    ? `${API_BASE_URL}/api/exchange-rate`
-    : "https://open.er-api.com/v6/latest/USD";
+export async function fetchUsdKrwRate(): Promise<number> {
+  try {
+    const { data } = await axios.get<ExchangeRateResponse>(
+      `${API_BASE_URL}/api/exchange-rate`,
+    );
 
-  const res = await fetch(url);
+    if (!data.success || typeof data.rate !== "number") {
+      return FALLBACK_USD_KRW_RATE;
+    }
 
-  if (!res.ok) {
-    throw new Error(`환율 요청 실패: ${res.status}`);
+    return data.rate;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 429) {
+      console.warn(
+        `환율 API 429 발생 -> fallback 환율 ${FALLBACK_USD_KRW_RATE} 적용`,
+      );
+      return FALLBACK_USD_KRW_RATE;
+    }
+
+    console.error("환율 조회 실패:", error);
+    return FALLBACK_USD_KRW_RATE;
   }
-
-  const data: ExchangeRateResponse = await res.json();
-
-  const rate = API_BASE_URL ? data.rate : data?.rates?.KRW;
-
-  if (typeof rate !== "number") {
-    throw new Error(data.message || "환율 없음");
-  }
-
-  return rate;
-};
+}
