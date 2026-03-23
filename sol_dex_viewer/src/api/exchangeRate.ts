@@ -1,16 +1,16 @@
-import axios from "axios";
+// import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
+// const API_BASE_URL =
+//   import.meta.env.VITE_API_BASE_URL || "http://localhost:3001";
 
 // 👉 현재는 고정 환율 사용 (429 대응)
 const FALLBACK_USD_KRW_RATE = 1506.2;
 
-type ExchangeRateResponse = {
-  success: boolean;
-  rate: number;
-  message?: string;
-};
+// type ExchangeRateResponse = {
+//   success: boolean;
+//   rate: number;
+//   message?: string;
+// };
 
 /**
  * USD → KRW 환율 조회
