@@ -141,6 +141,10 @@ const UserDashboardPage = () => {
   const visibleWallets = showAllWallets ? wallets : wallets.slice(0, 3);
   const hasMoreThanThree = wallets.length > 3;
 
+  console.log("usdKrwRate:", usdKrwRate);
+  console.log("totalUsd:", totalUsd);
+  console.log("walletValues:", walletValues);
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
       {/* <h1 className="text-2xl font-bold mb-2">내 대시보드</h1>
