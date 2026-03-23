@@ -59,10 +59,6 @@ const AddressSearchPage: React.FC = () => {
   const formatKRW = (n: number) =>
     n.toLocaleString("ko-KR", { maximumFractionDigits: 0 });
 
-  console.log("usdKrwRate:", usdKrwRate);
-  console.log("totalUsd:", totalUsd);
-  console.log("walletValues:", walletValues);
-
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-12 gap-6 bg-slate-950 text-slate-50">
       <h1 className="text-2xl md:text-3xl font-semibold">
